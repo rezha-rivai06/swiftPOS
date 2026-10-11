@@ -20,18 +20,18 @@ export default function RevenueCard({
     <View role="region" aria-label="Ringkasan Omset Kasir Hari Ini" style={styles.cardContainer}>
       <View style={styles.cardHeader}>
         <View style={styles.labelRow}>
-          <Text style={styles.labelText}>OMSET HARI INI</Text>
+          <Text style={styles.labelText}>PENDAPATAN HARI INI</Text>
         </View>
 
         <TouchableOpacity 
           role="button" 
-          aria-label={showNominal ? 'Sembunyikan nominal omset' : 'Tampilkan nominal omset'}
+          aria-label={showNominal ? 'Sembunyikan nominal pendapatan' : 'Tampilkan nominal pendapatan'}
           onPress={() => setShowNominal(!showNominal)}
           style={styles.eyeBtn}
           activeOpacity={0.7}
         >
           <Text style={styles.eyeBtnText}>
-            {showNominal ? '👁️ Sembunyikan' : '🙈 Tampilkan'}
+            {showNominal ? ' Sembunyikan' : 'Tampilkan'}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { BellIcon } from '../icons';
 
 interface NavbarProps {
   cafeName?: string;
@@ -28,21 +29,11 @@ export default function Navbar({
       <View style={styles.headerRight}>
         <TouchableOpacity 
           role="button" 
-          aria-label="Status operasional kasir"
-          style={[styles.statusPill, isOpen ? styles.statusOpen : styles.statusClosed]}
-          activeOpacity={0.8}
-        >
-          <View style={[styles.statusDot, isOpen ? styles.dotOpen : styles.dotClosed]} />
-          <Text style={styles.statusText}>{isOpen ? 'Kasir Buka' : 'Tutup'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          role="button" 
           aria-label="Pemberitahuan notifikasi"
           style={styles.bellButton}
           activeOpacity={0.7}
         >
-          <Text style={styles.bellIcon}>🔔</Text>
+          <BellIcon size={18} color="#FFFFFF" />
           <View style={styles.unreadBadge} />
         </TouchableOpacity>
       </View>
@@ -63,10 +54,6 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-  },
-  logoIcon: {
-    fontSize: 22,
   },
   brandTitle: {
     fontSize: 20,
@@ -83,41 +70,6 @@ const styles = StyleSheet.create({
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-  },
-  statusPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 20,
-    gap: 6,
-  },
-  statusOpen: {
-    backgroundColor: 'rgba(16, 185, 129, 0.25)',
-    borderWidth: 1,
-    borderColor: '#34D399',
-  },
-  statusClosed: {
-    backgroundColor: 'rgba(239, 68, 68, 0.25)',
-    borderWidth: 1,
-    borderColor: '#F87171',
-  },
-  statusDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-  },
-  dotOpen: {
-    backgroundColor: '#34D399',
-  },
-  dotClosed: {
-    backgroundColor: '#F87171',
-  },
-  statusText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#FFFFFF',
   },
   bellButton: {
     width: 38,
@@ -127,9 +79,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-  },
-  bellIcon: {
-    fontSize: 16,
   },
   unreadBadge: {
     position: 'absolute',

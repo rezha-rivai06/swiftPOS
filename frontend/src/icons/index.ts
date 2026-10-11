@@ -1,0 +1,8 @@
+export { default as CartIcon } from './CartIcon';
+export { default as OrdersIcon } from './OrdersIcon';
+export { default as CoffeeIcon } from './CoffeeIcon';
+export { default as StockIcon } from './StockIcon';
+export { default as ReportIcon } from './ReportIcon';
+export { default as CustomersIcon } from './CustomersIcon';
+export { default as PrinterIcon } from './PrinterIcon';
+export { default as ShiftIcon } from './ShiftIcon';

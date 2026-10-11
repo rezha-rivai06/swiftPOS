@@ -1,0 +1,13 @@
+node_modules/
+*/node_modules/
+.expo/
+*/.expo/
+dist/
+*/dist/
+web-build/
+*/web-build/
+.env*
+*.log
+.DS_Store
+*.pem
+*.tsbuildinfo

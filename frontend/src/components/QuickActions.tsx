@@ -20,30 +20,33 @@ export interface ActionItem {
   badgeColor?: string;
 }
 
-const DEFAULT_ACTIONS: ActionItem[] = [
+export const DEFAULT_ACTIONS: ActionItem[] = [
   { id: 'pos', title: 'Kasir POS', icon: <CartIcon size={24} color="#10B981" />, bgColor: '#10B981', badge: 'Utama', badgeColor: '#059669' },
   { id: 'orders', title: 'Riwayat', icon: <OrdersIcon size={24} color="#3B82F6" />, bgColor: '#3B82F6' },
-  { id: 'menu', title: 'Menu Kopi', icon: <CoffeeIcon size={24} color="#D97706" />, bgColor: '#D97706' },
-  { id: 'stock', title: 'Stok Bahan', icon: <StockIcon size={24} color="#EF4444" />, bgColor: '#EF4444', badge: 'Habis', badgeColor: '#DC2626' },
+  { id: 'menu', title: 'Kelola Menu', icon: <CoffeeIcon size={24} color="#D97706" />, bgColor: '#D97706' },
+  { id: 'stock', title: 'Stok Tersedi', icon: <StockIcon size={24} color="#EF4444" />, bgColor: '#EF4444', badge: 'Habis', badgeColor: '#DC2626' },
   { id: 'report', title: 'Laporan', icon: <ReportIcon size={24} color="#8B5CF6" />, bgColor: '#8B5CF6' },
-  { id: 'customer', title: 'Pelanggan', icon: <CustomersIcon size={24} color="#06B6D4" />, bgColor: '#06B6D4' },
-  { id: 'printer', title: 'Printer', icon: <PrinterIcon size={24} color="#64748B" />, bgColor: '#64748B' },
-  { id: 'shift', title: 'Tutup Shift', icon: <ShiftIcon size={24} color="#475569" />, bgColor: '#475569' },
 ];
 
 interface QuickActionsProps {
+  title?: string;
+  actions?: ActionItem[];
   onActionPress?: (id: string) => void;
 }
 
-export default function QuickActions({ onActionPress }: QuickActionsProps) {
+export default function QuickActions({ 
+  title = 'Fitur aplikasi',
+  actions = DEFAULT_ACTIONS, 
+  onActionPress 
+}: QuickActionsProps) {
   return (
     <View role="region" aria-label="Menu Akses Cepat" style={styles.sectionContainer}>
       <Text role="heading" aria-level={3} style={styles.sectionTitle}>
-        Akses Cepat Kasir
+        {title}
       </Text>
 
       <View role="menu" style={styles.grid}>
-        {DEFAULT_ACTIONS.map((item) => (
+        {actions.map((item) => (
           <TouchableOpacity
             key={item.id}
             role="menuitem"
@@ -84,10 +87,10 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 16,
+    paddingTop: 16,
     paddingBottom: 4,
     borderWidth: 1,
     borderColor: '#E2E8F0',
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   gridItem: {
-    width: '23%',
+    width: '25%',
     alignItems: 'center',
     marginBottom: 16,
   },

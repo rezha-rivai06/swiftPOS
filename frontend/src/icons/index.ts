@@ -7,3 +7,5 @@ export { default as CustomersIcon } from './CustomersIcon';
 export { default as PrinterIcon } from './PrinterIcon';
 export { default as ShiftIcon } from './ShiftIcon';
 export { default as BellIcon } from './BellIcon';
+export { default as ArrowLeftIcon } from './ArrowLeftIcon';
+

@@ -4,8 +4,10 @@ import {
   View, 
   ScrollView, 
   SafeAreaView, 
-  StatusBar 
+  StatusBar,
+  useWindowDimensions 
 } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { 
   Navbar, 
@@ -16,6 +18,16 @@ import {
 } from '../components';
 
 export default function Main() {
+  const router = useRouter();
+  const { width } = useWindowDimensions();
+  const tablet = width >= 768;
+
+  const aksi = (id: string) => {
+    if (id === 'pos') {
+      router.push('/pos');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
@@ -24,18 +36,37 @@ export default function Main() {
 
       <View role="main" style={styles.mainContainer}>
         <ScrollView 
-          contentContainerStyle={styles.scrollContent} 
+          contentContainerStyle={[
+            styles.scrollContent,
+            tablet && styles.scrollContentTablet
+          ]} 
           showsVerticalScrollIndicator={false}
         >
-          <RevenueCard />
-          <QuickActions />
-          <AlertBanner />
-          <RecentOrders />
+          {tablet ? (
+            <View style={styles.tabletRow}>
+              <View style={styles.tabletLeftCol}>
+                <RevenueCard />
+                <QuickActions onActionPress={aksi} />
+                <AlertBanner />
+              </View>
+              <View style={styles.tabletRightCol}>
+                <RecentOrders />
+              </View>
+            </View>
+          ) : (
+            <>
+              <RevenueCard />
+              <QuickActions onActionPress={aksi} />
+              <AlertBanner />
+              <RecentOrders />
+            </>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -55,4 +86,23 @@ const styles = StyleSheet.create({
     paddingTop: 22,
     paddingBottom: 40,
   },
+  scrollContentTablet: {
+    paddingHorizontal: 28,
+    paddingTop: 28,
+    maxWidth: 1400,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  tabletRow: {
+    flexDirection: 'row',
+    gap: 24,
+    alignItems: 'flex-start',
+  },
+  tabletLeftCol: {
+    flex: 1.15,
+  },
+  tabletRightCol: {
+    flex: 0.85,
+  },
 });
+

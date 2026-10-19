@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalHapus from '../components/modalHapus';
 import {
   StyleSheet,
   Text,
@@ -50,7 +51,7 @@ const SAMPLE_PRODUCTS: Product[] = [
 ];
 
 export default function KelolaPemesanan({
-  storeName = 'Kelola Toko',
+  storeName = 'kelola pembelian',
   onBack,
 }: KelolaPemesananProps) {
   const router = useRouter();
@@ -62,14 +63,22 @@ export default function KelolaPemesanan({
     p1: { id: 'p1', name: 'Kopi Susu Aren', price: 18000, qty: 1 },
     p6: { id: 'p6', name: 'Mie Nyemek Spesial', price: 15000, qty: 1 },
   });
+  const [konfirmasiHapus, setKonfirmasiHapus] = useState<{ tampil: boolean; idItem: string; namaItem: string }>({
+    tampil: false,
+    idItem: '',
+    namaItem: '',
+  });
 
   const kembali = () => {
     if (onBack) {
       onBack();
-    } else {
+    } else if (router.canGoBack()) {
       router.back();
+    } else {
+      router.replace('/main');
     }
   };
+
 
   const tambahKeranjang = (product: Product) => {
     setCart((prev) => {
@@ -104,19 +113,30 @@ export default function KelolaPemesanan({
   };
 
   const kurangiJumlah = (id: string) => {
+    const item = cart[id];
+    if (!item) return;
+    if (item.qty <= 1) {
+      setKonfirmasiHapus({ tampil: true, idItem: id, namaItem: item.name });
+      return;
+    }
     setCart((prev) => {
-      const item = prev[id];
-      if (!item) return prev;
-      if (item.qty <= 1) {
-        const next = { ...prev };
-        delete next[id];
-        return next;
-      }
-      return {
-        ...prev,
-        [id]: { ...item, qty: item.qty - 1 },
-      };
+      const current = prev[id];
+      if (!current) return prev;
+      return { ...prev, [id]: { ...current, qty: current.qty - 1 } };
     });
+  };
+
+  const hapusItem = () => {
+    setCart((prev) => {
+      const next = { ...prev };
+      delete next[konfirmasiHapus.idItem];
+      return next;
+    });
+    setKonfirmasiHapus({ tampil: false, idItem: '', namaItem: '' });
+  };
+
+  const batalHapus = () => {
+    setKonfirmasiHapus({ tampil: false, idItem: '', namaItem: '' });
   };
 
   const daftarProduk =
@@ -134,6 +154,12 @@ export default function KelolaPemesanan({
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <ModalHapus
+        tampil={konfirmasiHapus.tampil}
+        namaItem={konfirmasiHapus.namaItem}
+        onHapus={hapusItem}
+        onBatal={batalHapus}
+      />
       <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
 
       <View role="navigation" aria-label="Navigasi Kasir" style={styles.navbar}>
@@ -236,7 +262,7 @@ export default function KelolaPemesanan({
             <View role="region" aria-label="Nota Pesanan" style={styles.receiptColumn}>
               <View style={styles.receiptCard}>
                 <Text role="heading" aria-level={3} style={styles.receiptTitle}>
-                  Receipt
+                  Rincian
                 </Text>
 
                 <ScrollView
@@ -357,31 +383,31 @@ export default function KelolaPemesanan({
               </View>
 
               <View role="list" aria-label="Daftar Produk" style={styles.productGridMobile}>
-                {daftarProduk.map((prod) => (
+                {daftarProduk.map((produk) => (
                   <View
-                    key={prod.id}
+                    key={produk.id}
                     role="listitem"
                     style={styles.productCardMobile}
                   >
-                    <View style={[styles.productImagePlaceholder, { backgroundColor: prod.color }]}>
+                    <View style={[styles.productImagePlaceholder, { backgroundColor: produk.color }]}>
                       <Text style={styles.productCategoryLabel}>
-                        {prod.category.toUpperCase()}
+                        {produk.category.toUpperCase()}
                       </Text>
                     </View>
 
                     <View style={styles.productInfo}>
                       <Text style={styles.productName} numberOfLines={1}>
-                        {prod.name}
+                        {produk.name}
                       </Text>
                       <View style={styles.priceAndActionRow}>
                         <Text style={styles.productPrice}>
-                          {formatRupiah(prod.price)}
+                          {formatRupiah(produk.price)}
                         </Text>
                         <TouchableOpacity
                           role="button"
-                          aria-label={`Tambah ${prod.name} ke keranjang`}
+                          aria-label={`Tambah ${produk.name} ke keranjang`}
                           style={styles.addButton}
-                          onPress={() => tambahKeranjang(prod)}
+                          onPress={() => tambahKeranjang(produk)}
                           activeOpacity={0.8}
                         >
                           <Text style={styles.addButtonText}>+</Text>

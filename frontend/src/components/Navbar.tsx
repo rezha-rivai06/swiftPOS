@@ -6,12 +6,14 @@ interface NavbarProps {
   cafeName?: string;
   title?: string;
   isOpen?: boolean;
+  onNotificationPress?: () => void;
 }
 
 export default function Navbar({
   cafeName = 'SwiftPOS',
   title = 'Kelola Bisnis Anda',
   isOpen = true,
+  onNotificationPress,
 }: NavbarProps) {
   return (
     <View role="navigation" style={styles.navbarContainer}>
@@ -32,6 +34,7 @@ export default function Navbar({
           aria-label="Pemberitahuan notifikasi"
           style={styles.bellButton}
           activeOpacity={0.7}
+          onPress={onNotificationPress}
         >
           <BellIcon size={18} color="#FFFFFF" />
           <View style={styles.unreadBadge} />

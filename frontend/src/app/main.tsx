@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   StyleSheet, 
   View, 
@@ -10,11 +10,13 @@ import {
 import { useRouter } from 'expo-router';
 
 import { 
-  Navbar, 
+  Navbar,
+  ModalNotif, 
   RevenueCard, 
   QuickActions, 
   AlertBanner, 
-  RecentOrders 
+  RecentOrders,
+  RingkasanPenjualan,
 } from '../components';
 
 export default function Main() {
@@ -22,9 +24,42 @@ export default function Main() {
   const { width } = useWindowDimensions();
   const tablet = width >= 768;
 
+  const [notif, setNotif] = useState({
+    visible: false,
+    judul: '',
+    pesan: '',
+  });
+
+  const bukaNotif = (
+    judul: string,
+    pesan: string
+  ) => {
+    setNotif({ visible: true, judul, pesan });
+  };
+
+  const tutupNotif = () => {
+    setNotif((prev) => ({ ...prev, visible: false }));
+  };
+
   const aksi = (id: string) => {
-    if (id === 'pos') {
-      router.push('/pos');
+    switch (id) {
+      case 'pos':
+        router.push('/pos');
+        break;
+      case 'orders':
+        bukaNotif('Kelola Pemesanan', 'Fitur ini masih dalam tahap pengembangan.');
+        break;
+      case 'menu':
+        bukaNotif('Kelola Menu', 'Fitur ini masih dalam tahap pengembangan.');
+        break;
+      case 'stock':
+        bukaNotif('Kelola Stok', 'Fitur ini masih dalam tahap pengembangan.');
+        break;
+      case 'report':
+        bukaNotif('Kelola Laporan', 'Fitur ini masih dalam tahap pengembangan.');
+        break;
+      default:
+        break;
     }
   };
 
@@ -32,7 +67,22 @@ export default function Main() {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
       
-      <Navbar />
+      <ModalNotif
+        visible={notif.visible}
+        judul={notif.judul}
+        pesan={notif.pesan}
+        teksTombol="Mengerti"
+        onClose={tutupNotif}
+      />
+
+      <Navbar
+        onNotificationPress={() =>
+          bukaNotif(
+            'Pemberitahuan Sistem',
+            '2 Bahan Baku Kritis: Susu UHT sisa 2 kotak dan Paper Cup 16oz tersisa 20 pcs. Harap segera restok.'
+          )
+        }
+      />
 
       <View role="main" style={styles.mainContainer}>
         <ScrollView 
@@ -43,21 +93,23 @@ export default function Main() {
           showsVerticalScrollIndicator={false}
         >
           {tablet ? (
-            <View style={styles.tabletRow}>
-              <View style={styles.tabletLeftCol}>
-                <RevenueCard />
-                <QuickActions onActionPress={aksi} />
-                <AlertBanner />
+            <>
+              <View style={styles.tabletRow}>
+                <View style={styles.tabletLeftCol}>
+                  <RevenueCard />
+                  <QuickActions onActionPress={aksi} />
+                </View>
+                <View style={styles.tabletRightCol}>
+                  <RecentOrders />
+                </View>
               </View>
-              <View style={styles.tabletRightCol}>
-                <RecentOrders />
-              </View>
-            </View>
+              <RingkasanPenjualan />
+            </>
           ) : (
             <>
               <RevenueCard />
               <QuickActions onActionPress={aksi} />
-              <AlertBanner />
+              <RingkasanPenjualan />
               <RecentOrders />
             </>
           )}

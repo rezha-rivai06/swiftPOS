@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
-export interface RingkasanPenjualanProps {
+export interface RingkasanPenjualanTipeData {
   totalPenjualan?: number;
   targetPenjualan?: number;
   totalKategori?: number;
@@ -38,7 +38,7 @@ export default function RingkasanPenjualan({
   totalKategori = 8,
   topPerformer = 'Makanan & Minuman',
   persentaseTopPerformer = 68,
-}: RingkasanPenjualanProps) {
+}: RingkasanPenjualanTipeData) {
   const [bukaRincian, setBukaRincian] = useState<boolean>(false);
 
   const persentase = Math.round(
@@ -60,7 +60,7 @@ export default function RingkasanPenjualan({
       <View style={styles.headerBaris}>
         <View>
           <Text role="heading" aria-level={3} style={styles.judulKartu}>
-            Penjualan Hari Ini
+            Penjualan Hari ini
           </Text>
           <Text style={styles.subJudulKartu}>
             {`Total ${totalKategori} kategori aktif terjual`}

@@ -69,6 +69,12 @@ export default function KelolaPemesanan({
     namaItem: '',
   });
 
+  const [bukaSheetKeranjang, setBukaSheetKeranjang] = useState(false);
+
+  const toggleSheetKeranjang = () => {
+    setBukaSheetKeranjang((keranjang) => !keranjang);
+  };
+
   const kembali = () => {
     if (onBack) {
       onBack();
@@ -81,16 +87,16 @@ export default function KelolaPemesanan({
 
 
   const tambahKeranjang = (product: Product) => {
-    setCart((prev) => {
-      const existing = prev[product.id];
-      if (existing) {
+    setCart((tambah) => {
+      const tambahItem = tambah[product.id];
+      if (tambahItem) {
         return {
-          ...prev,
-          [product.id]: { ...existing, qty: existing.qty + 1 },
+          ...tambah,
+          [product.id]: { ...tambahItem, qty: tambahItem.qty + 1 },
         };
       }
       return {
-        ...prev,
+        ...tambah,
         [product.id]: {
           id: product.id,
           name: product.name,
@@ -102,11 +108,11 @@ export default function KelolaPemesanan({
   };
 
   const tambahJumlah = (id: string) => {
-    setCart((prev) => {
-      const item = prev[id];
-      if (!item) return prev;
+    setCart((tambah) => {
+      const item = tambah[id];
+      if (!item) return tambah;
       return {
-        ...prev,
+        ...tambah,
         [id]: { ...item, qty: item.qty + 1 },
       };
     });
@@ -119,16 +125,16 @@ export default function KelolaPemesanan({
       setKonfirmasiHapus({ tampil: true, idItem: id, namaItem: item.name });
       return;
     }
-    setCart((prev) => {
-      const current = prev[id];
-      if (!current) return prev;
-      return { ...prev, [id]: { ...current, qty: current.qty - 1 } };
+    setCart((kurang) => {
+      const saatIni = kurang[id];
+      if (!saatIni) return kurang;
+      return { ...kurang, [id]: { ...saatIni, qty: saatIni.qty - 1 } };
     });
   };
 
   const hapusItem = () => {
-    setCart((prev) => {
-      const next = { ...prev };
+    setCart((hapus) => {
+      const next = { ...hapus };
       delete next[konfirmasiHapus.idItem];
       return next;
     });
@@ -262,7 +268,7 @@ export default function KelolaPemesanan({
             <View role="region" aria-label="Nota Pesanan" style={styles.receiptColumn}>
               <View style={styles.receiptCard}>
                 <Text role="heading" aria-level={3} style={styles.receiptTitle}>
-                  Rincian
+                  Rincian Item
                 </Text>
 
                 <ScrollView
@@ -419,27 +425,116 @@ export default function KelolaPemesanan({
               </View>
             </ScrollView>
 
-            <View role="region" aria-label="Ringkasan Keranjang Belanja" style={styles.mobileCartBar}>
-              <View style={styles.mobileCartInfo}>
-                <Text style={styles.mobileCartCount}>
-                  {totalItem} Item
-                </Text>
-                <Text style={styles.mobileCartTotal}>
-                  {formatRupiah(subtotal)}
-                </Text>
-              </View>
+            
+            {bukaSheetKeranjang && (
               <TouchableOpacity
                 role="button"
-                aria-label="Proses Pembayaran Pesanan Mobile"
-                style={[
-                  styles.mobilePayButton,
-                  isiKeranjang.length === 0 && styles.payButtonDisabled,
-                ]}
-                disabled={isiKeranjang.length === 0}
-                activeOpacity={0.8}
+                aria-label="Tutup lembar rincian pesanan"
+                style={styles.sheetBackdrop}
+                activeOpacity={1}
+                onPress={toggleSheetKeranjang}
+              />
+            )}
+
+            <View
+              role="region"
+              aria-label="Ringkasan Keranjang Belanja"
+              aria-expanded={bukaSheetKeranjang}
+              style={[
+                styles.mobileCartBar,
+                bukaSheetKeranjang && styles.mobileCartBarExpanded,
+              ]}
+            >
+              
+              <TouchableOpacity
+                role="button"
+                aria-label={bukaSheetKeranjang ? 'Tutup rincian keranjang belanja' : 'Buka rincian keranjang belanja'}
+                style={styles.dragHandle}
+                onPress={toggleSheetKeranjang}
+                activeOpacity={0.7}
               >
-                <Text style={styles.mobilePayButtonText}>Bayar</Text>
+                <View style={styles.dragHandlePill} />
               </TouchableOpacity>
+
+              {bukaSheetKeranjang && (
+                <View style={styles.expandedCartContent}>
+                  <Text style={styles.expandedCartTitle}>Rincian Item</Text>
+                  <ScrollView
+                    style={styles.mobileCartList}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    {isiKeranjang.length === 0 ? (
+                      <View style={styles.emptyCartContainer}>
+                        <Text style={styles.emptyCartText}>
+                          Keranjang masih kosong.
+                        </Text>
+                        <Text style={styles.emptyCartSubtext}>
+                          Pilih produk di atas untuk memulai pesanan.
+                        </Text>
+                      </View>
+                    ) : (
+                      isiKeranjang.map((item) => (
+                        <View key={item.id} role="listitem" style={styles.cartRowMobile}>
+                          <View style={styles.cartRowLeftMobile}>
+                            <Text style={styles.cartItemNameMobile} numberOfLines={1}>
+                              {item.name}
+                            </Text>
+                            <Text style={styles.cartItemPriceMobile}>
+                              {formatRupiah(item.price)}
+                            </Text>
+                          </View>
+
+                          <View style={styles.stepperContainer}>
+                            <TouchableOpacity
+                              role="button"
+                              aria-label={`Kurangi ${item.name}`}
+                              style={styles.stepperButton}
+                              onPress={() => kurangiJumlah(item.id)}
+                              activeOpacity={0.7}
+                            >
+                              <Text style={styles.stepperButtonText}>-</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.stepperValue}>{item.qty}</Text>
+                            <TouchableOpacity
+                              role="button"
+                              aria-label={`Tambah ${item.name}`}
+                              style={styles.stepperButton}
+                              onPress={() => tambahJumlah(item.id)}
+                              activeOpacity={0.7}
+                            >
+                              <Text style={styles.stepperButtonText}>+</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      ))
+                    )}
+                  </ScrollView>
+                </View>
+              )}
+
+              {/* Baris Ringkasan Harga & Tombol Bayar */}
+              <View style={styles.mobileCartFooter}>
+                <View style={styles.mobileCartInfo}>
+                  <Text style={styles.mobileCartCount}>
+                    {totalItem} Item
+                  </Text>
+                  <Text style={styles.mobileCartTotal}>
+                    {formatRupiah(subtotal)}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  role="button"
+                  aria-label="Proses Pembayaran Pesanan Mobile"
+                  style={[
+                    styles.mobilePayButton,
+                    isiKeranjang.length === 0 && styles.payButtonDisabled,
+                  ]}
+                  disabled={isiKeranjang.length === 0}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.mobilePayButtonText}>Bayar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         )}
@@ -774,17 +869,102 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    paddingTop: 6,
+    paddingBottom: 16,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     borderTopWidth: 1,
     borderTopColor: '#E2E8F0',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 8,
+    zIndex: 95,
+  },
+  mobileCartBarExpanded: {
+    height: '90%',
+    zIndex: 100,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+    shadowOffset: { width: 0, height: -6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    elevation: 20,
+  },
+  sheetBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    zIndex: 90,
+  },
+  dragHandle: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  dragHandlePill: {
+    width: 38,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#CBD5E1',
+    marginBottom: 2,
+  },
+  dragHandleText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#94A3B8',
+  },
+  expandedCartContent: {
+    flex: 1,
+    width: '100%',
+    marginBottom: 8,
+  },
+  expandedCartTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: '#0F172A',
+    marginBottom: 10,
+    paddingHorizontal: 4,
+  },
+  mobileCartList: {
+    flex: 1,
+    width: '100%',
+  },
+  cartRowMobile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  cartRowLeftMobile: {
+    flex: 1,
+    marginRight: 12,
+  },
+  cartItemNameMobile: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#0F172A',
+    marginBottom: 2,
+  },
+  cartItemPriceMobile: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#0F766E',
+  },
+  mobileCartFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#F1F5F9',
+    paddingTop: 10,
   },
   mobileCartInfo: {
     gap: 2,

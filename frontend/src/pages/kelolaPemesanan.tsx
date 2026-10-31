@@ -281,7 +281,7 @@ export default function KelolaPemesanan({
                         Keranjang masih kosong.
                       </Text>
                       <Text style={styles.emptyCartSubtext}>
-                        Pilih produk di samping untuk memulai pesanan.
+                        Pilih produk terlebih dahulu sebelum lanjut.
                       </Text>
                     </View>
                   ) : (
@@ -469,7 +469,7 @@ export default function KelolaPemesanan({
                           Keranjang masih kosong.
                         </Text>
                         <Text style={styles.emptyCartSubtext}>
-                          Pilih produk di atas untuk memulai pesanan.
+                          Pilih produk terlebih dahulu sebelum lanjut.
                         </Text>
                       </View>
                     ) : (
@@ -512,8 +512,8 @@ export default function KelolaPemesanan({
                 </View>
               )}
 
-              {/* Baris Ringkasan Harga & Tombol Bayar */}
-              <View style={styles.mobileCartFooter}>
+              
+              <View role={"ringkasanBayar" as any} style={styles.mobileCartFooter}>
                 <View style={styles.mobileCartInfo}>
                   <Text style={styles.mobileCartCount}>
                     {totalItem} Item

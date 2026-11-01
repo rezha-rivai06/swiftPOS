@@ -1,8 +1,10 @@
 import React from 'react';
 import KelolaPemesanan from './kelolaPemesanan';
+import RiwayatPesanan from './riwayat';
 
-export const DAFTAR_HALAMAN: Record<string, React.ComponentType<any>> = {
+export type HalamanRute = 'pos' | 'riwayat';
+
+export const DAFTAR_HALAMAN: Record<HalamanRute, React.ComponentType<any>> = {
   pos: KelolaPemesanan,
+  riwayat: RiwayatPesanan,
 };
-
-export { default as KelolaPemesanan } from './kelolaPemesanan';

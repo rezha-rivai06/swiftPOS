@@ -44,22 +44,22 @@ export default function RevenueCard({
 
       <View style={styles.statsRow}>
         <View style={styles.statCol}>
-          <Text style={styles.statNumber}>{transactionsCount}</Text>
-          <Text style={styles.statLabel}>Transaksi</Text>
+          <Text style={styles.statNumber} numberOfLines={1}>{transactionsCount}</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>Transaksi</Text>
         </View>
 
         <View style={styles.vDivider} />
 
         <View style={styles.statCol}>
-          <Text style={styles.statNumber}>{showNominal ? cashAmount : '••••••'}</Text>
-          <Text style={styles.statLabel}>Tunai (Laci)</Text>
+          <Text style={styles.statNumber} numberOfLines={1}>{showNominal ? cashAmount : '••••••'}</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>Tunai (Laci)</Text>
         </View>
 
         <View style={styles.vDivider} />
 
         <View style={styles.statCol}>
-          <Text style={styles.statNumber}>{showNominal ? qrisAmount : '••••••'}</Text>
-          <Text style={styles.statLabel}>QRIS / Non-Tunai</Text>
+          <Text style={styles.statNumber} numberOfLines={1}>{showNominal ? qrisAmount : '••••••'}</Text>
+          <Text style={styles.statLabel} numberOfLines={1}>QRIS / Non-Tunai</Text>
         </View>
       </View>
     </View>
@@ -70,8 +70,10 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: '#0F172A',
     borderRadius: 20,
-    padding: 18,
+    padding: 16,
     marginBottom: 20,
+    width: '100%',
+    maxWidth: '100%',
     shadowColor: '#0F172A',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.16,
@@ -122,20 +124,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
   },
   statCol: {
     flex: 1,
     alignItems: 'center',
+    minWidth: 0,
+    paddingHorizontal: 2,
   },
   statNumber: {
     fontSize: 13,
     fontWeight: '800',
     color: '#F8FAFC',
+    textAlign: 'center',
   },
   statLabel: {
     fontSize: 10,
     color: '#94A3B8',
     marginTop: 2,
+    textAlign: 'center',
   },
   vDivider: {
     width: 1,

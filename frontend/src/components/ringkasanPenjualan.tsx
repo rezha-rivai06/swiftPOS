@@ -92,7 +92,7 @@ export default function RingkasanPenjualan({
           aria-label={`Target penjualan tercapai ${persentase}%`}
           style={styles.wrapperRing}
         >
-          <Svg width={120} height={120} viewBox="0 0 110 110">
+          <Svg width={104} height={104} viewBox="0 0 110 110">
             {/* Background Track */}
             <Circle
               cx={55}
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   kartu: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
-    padding: 20,
+    padding: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
     shadowColor: '#000',
@@ -195,12 +195,15 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 3,
     marginTop: 16,
+    width: '100%',
+    maxWidth: '100%',
   },
   headerBaris: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 18,
+    width: '100%',
   },
   judulKartu: {
     fontSize: 16,
@@ -229,13 +232,15 @@ const styles = StyleSheet.create({
   barisTengah: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    gap: 14,
+    width: '100%',
   },
   wrapperRing: {
-    width: 120,
-    height: 120,
+    width: 104,
+    height: 104,
     justifyContent: 'center',
     alignItems: 'center',
+    flexShrink: 0,
   },
   labelTengah: {
     position: 'absolute',
@@ -243,10 +248,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   angkaPersentase: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     color: '#0F766E',
-    lineHeight: 26,
+    lineHeight: 24,
   },
   labelFraksi: {
     fontSize: 11,
@@ -261,6 +266,7 @@ const styles = StyleSheet.create({
   },
   infoKategori: {
     flex: 1,
+    minWidth: 0,
     justifyContent: 'center',
   },
   labelInfo: {
@@ -270,17 +276,18 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   nilaiKategori: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
     color: '#0F172A',
   },
   jarak: {
-    height: 12,
+    height: 10,
   },
   nilaiTopPerformer: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: '#0F172A',
+    flexShrink: 1,
   },
   panelEkspansi: {
     marginTop: 16,

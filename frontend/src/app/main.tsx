@@ -17,6 +17,7 @@ import {
   AlertBanner, 
   RecentOrders,
   RingkasanPenjualan,
+  ActionId,
 } from '../components';
 
 export default function Main() {
@@ -38,16 +39,16 @@ export default function Main() {
   };
 
   const tutupNotif = () => {
-    setNotif((prev) => ({ ...prev, visible: false }));
+    setNotif((notif) => ({ ...notif, visible: false }));
   };
 
   const aksi = (id: string) => {
-    switch (id) {
+    switch (id as ActionId) {
       case 'pos':
         router.push('/pos');
         break;
-      case 'orders':
-        bukaNotif('Kelola Pemesanan', 'Fitur ini masih dalam tahap pengembangan.');
+      case 'riwayat':
+        router.push('/riwayat');
         break;
       case 'menu':
         bukaNotif('Kelola Menu', 'Fitur ini masih dalam tahap pengembangan.');
@@ -124,6 +125,8 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#0F766E',
+    width: '100%',
+    maxWidth: '100%',
   },
   mainContainer: {
     flex: 1,
@@ -132,11 +135,15 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
     overflow: 'hidden',
     marginTop: -12,
+    width: '100%',
+    maxWidth: '100%',
   },
   scrollContent: {
-    padding: 18,
+    paddingHorizontal: 16,
     paddingTop: 22,
     paddingBottom: 40,
+    width: '100%',
+    maxWidth: '100%',
   },
   scrollContentTablet: {
     paddingHorizontal: 28,

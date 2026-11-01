@@ -1,4 +1,5 @@
 import React from 'react';
+import { HalamanRute } from '../pages';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { 
   CartIcon, 
@@ -11,8 +12,10 @@ import {
   ShiftIcon 
 } from '../icons';
 
+export type ActionId = HalamanRute | 'menu' | 'stock' | 'report';
+
 export interface ActionItem {
-  id: string;
+  id: ActionId;
   title: string;
   icon: React.ReactNode;
   bgColor: string;
@@ -22,16 +25,16 @@ export interface ActionItem {
 
 export const DEFAULT_ACTIONS: ActionItem[] = [
   { id: 'pos', title: 'Kasir POS', icon: <CartIcon size={24} color="#10B981" />, bgColor: '#10B981', badge: 'Utama', badgeColor: '#059669' },
-  { id: 'orders', title: 'Riwayat', icon: <OrdersIcon size={24} color="#3B82F6" />, bgColor: '#3B82F6' },
+  { id: 'riwayat', title: 'Riwayat', icon: <OrdersIcon size={24} color="#3B82F6" />, bgColor: '#3B82F6' },
   { id: 'menu', title: 'Kelola Menu', icon: <CoffeeIcon size={24} color="#D97706" />, bgColor: '#D97706' },
-  { id: 'stock', title: 'Stok Tersedi', icon: <StockIcon size={24} color="#EF4444" />, bgColor: '#EF4444', badge: 'Habis', badgeColor: '#DC2626' },
+  { id: 'stock', title: 'Stok Bahan', icon: <StockIcon size={24} color="#EF4444" />, bgColor: '#EF4444', badge: 'Habis', badgeColor: '#DC2626' },
   { id: 'report', title: 'Laporan', icon: <ReportIcon size={24} color="#8B5CF6" />, bgColor: '#8B5CF6' },
 ];
 
 interface QuickActionsProps {
   title?: string;
   actions?: ActionItem[];
-  onActionPress?: (id: string) => void;
+  onActionPress?: (id: ActionId) => void;
 }
 
 export default function QuickActions({ 
@@ -76,6 +79,8 @@ export default function QuickActions({
 const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 20,
+    width: '100%',
+    maxWidth: '100%',
   },
   sectionTitle: {
     fontSize: 15,
@@ -99,11 +104,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
+    width: '100%',
+    maxWidth: '100%',
   },
   gridItem: {
     width: '25%',
     alignItems: 'center',
     marginBottom: 16,
+    paddingHorizontal: 2,
   },
   iconBox: {
     width: 52,
@@ -132,5 +140,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#334155',
     textAlign: 'center',
+    width: '100%',
   },
 });

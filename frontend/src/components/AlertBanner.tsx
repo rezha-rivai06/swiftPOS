@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-interface AlertBannerProps {
+interface AlertBannerTipeData {
   title?: string;
   description?: string;
   actionText?: string;
@@ -13,7 +13,7 @@ export default function AlertBanner({
   description = 'Susu UHT sisa 2 kotak, Paper Cup 16oz tersisa 20 pcs.',
   actionText = 'Restok',
   onActionPress,
-}: AlertBannerProps) {
+}: AlertBannerTipeData) {
   return (
     <View role="alert" aria-label={title} style={styles.alertBox}>
       <View style={styles.iconCircle}>

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import { DAFTAR_HALAMAN } from '../pages';
+import { DAFTAR_HALAMAN, HalamanRute } from '../pages';
 
 export default function DynamicPage() {
   const { page } = useLocalSearchParams<{ page: string }>();
   const router = useRouter();
 
-  const KomponenHalaman = DAFTAR_HALAMAN[page || ''];
+  const KomponenHalaman = DAFTAR_HALAMAN[page as HalamanRute];
 
   if (!KomponenHalaman) {
     return (

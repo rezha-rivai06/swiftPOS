@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { BellIcon } from '../icons';
 
-interface NavbarProps {
+interface NavbarTipeData {
   cafeName?: string;
   title?: string;
   isOpen?: boolean;
@@ -14,7 +14,7 @@ export default function Navbar({
   title = 'Kelola Bisnis Anda',
   isOpen = true,
   onNotificationPress,
-}: NavbarProps) {
+}: NavbarTipeData) {
   return (
     <View role="navigation" style={styles.navbarContainer}>
       <View style={styles.headerLeft}>
@@ -47,12 +47,14 @@ export default function Navbar({
 const styles = StyleSheet.create({
   navbarContainer: {
     backgroundColor: '#0F766E',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 28,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
+    maxWidth: '100%',
   },
   headerLeft: {
     flexDirection: 'row',

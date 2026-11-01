@@ -106,12 +106,15 @@ export default function RecentOrders({ onViewAll }: RecentOrdersProps) {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
+    width: '100%',
+    maxWidth: '100%',
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
+    width: '100%',
   },
   title: {
     fontSize: 15,
@@ -125,20 +128,24 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: 10,
+    width: '100%',
   },
   orderCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
-    padding: 14,
+    padding: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    width: '100%',
+    maxWidth: '100%',
   },
   cardLeft: {
     flex: 1,
     marginRight: 10,
+    minWidth: 0,
   },
   topMeta: {
     flexDirection: 'row',

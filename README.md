@@ -1,4 +1,4 @@
-# ☕ SwiftPOS — Sistem Kasir & Manajemen Bisnis UMKM
+# SwiftPOS — Sistem Kasir & Manajemen Bisnis UMKM
 
 > **Aplikasi Kasir (Point of Sale) Modern, Responsif, dan Berkinerja Tinggi untuk Gerai Kopi dan Usaha Kuliner (F&B) UMKM.**
 
@@ -12,30 +12,30 @@
 ---
 
 ## Daftar Isi
-- [Tentang SwiftPOS](#-tentang-swiftpos)
-- [Teknologi & Dependensi Kunci](#-teknologi--dependensi-kunci)
-- [Arsitektur & Pola Desain (Clean Architecture)](#-arsitektur--pola-desain-clean-architecture)
-- [Matriks Fitur & Status Pengembangan](#-matriks-fitur--status-pengembangan)
-- [Implementasi Kode Kunci](#-implementasi-kode-kunci)
+- [Tentang SwiftPOS](#tentang-swiftpos)
+- [Teknologi & Dependensi Kunci](#teknologi--dependensi-kunci)
+- [Arsitektur & Pola Desain (Clean Architecture)](#arsitektur--pola-desain-clean-architecture)
+- [Matriks Fitur & Status Pengembangan](#matriks-fitur--status-pengembangan)
+- [Implementasi Kode Kunci](#implementasi-kode-kunci)
   - [1. Single Source of Truth (SSOT) Dynamic Router](#1-single-source-of-truth-ssot-dynamic-router)
   - [2. Interactive SVG Circular Progress Gauge](#2-interactive-svg-circular-progress-gauge)
   - [3. Responsive Adaptive Layout Engine](#3-responsive-adaptive-layout-engine)
-- [Struktur Direktori Proyek](#-struktur-direktori-proyek)
-- [Panduan Memulai & Pengembangan Lokal](#-panduan-memulai--pengembangan-lokal)
-- [Standar Kualitas & Panduan Rekayasa](#-standar-kualitas--panduan-rekayasa)
-- [Pengembang & Dedikasi](#-pengembang--dedikasi)
+- [Struktur Direktori Proyek](#struktur-direktori-proyek)
+- [Panduan Memulai & Pengembangan Lokal](#panduan-memulai--pengembangan-lokal)
+- [Standar Kualitas & Panduan Rekayasa](#standar-kualitas--panduan-rekayasa)
+- [Pengembang & Dedikasi](#pengembang--dedikasi)
 
 ---
 
-## 💡 Tentang SwiftPOS
+## Tentang SwiftPOS
 
-**SwiftPOS** dibangun dari nol oleh **zhent** (Fullstack engineer) dengan satu tujuan utama: menyediakan ekosistem kasir digital yang ringan, intuitif, cepat, dan berstandar industri bagi para pengusaha UMKM, khususnya kedai kopi dan industri kuliner (*Food & Beverages*).
+**SwiftPOS** dibangun dari nol oleh **Rezha (zhent)** (Fullstack Engineer) dengan satu tujuan utama: menyediakan ekosistem kasir digital yang ringan, intuitif, cepat, dan berstandar industri bagi para pengusaha UMKM, khususnya kedai kopi dan industri kuliner (*Food & Beverages*).
 
 Banyak UMKM terhambat oleh aplikasi kasir yang lambat, berbasis langganan mahal, atau memiliki antarmuka pengguna yang rumit bagi barista dan kasir operasional. SwiftPOS dirancang dengan prinsip **Zero Friction**, **Clean Aesthetics**, dan **Adaptive Ergonomics** yang dapat dijalankan secara instan di perangkat Tablet (layar kasir counter) maupun Smartphone (kasir bergerak / *on-the-go*).
 
 ---
 
-## 🛠️ Teknologi & Dependensi Kunci
+## Teknologi & Dependensi Kunci
 
 | Kategori | Teknologi / Pustaka | Versi | Peran & Penggunaan |
 | :--- | :--- | :--- | :--- |
@@ -50,7 +50,7 @@ Banyak UMKM terhambat oleh aplikasi kasir yang lambat, berbasis langganan mahal,
 
 ---
 
-## 🏗️ Arsitektur & Pola Desain (Clean Architecture)
+## Arsitektur & Pola Desain (Clean Architecture)
 
 SwiftPOS mengimplementasikan pemisahan tanggung jawab (*Separation of Concerns*) yang ketat agar kode dapat dipelihara dan diskalakan secara berkelanjutan:
 
@@ -87,27 +87,27 @@ SwiftPOS mengimplementasikan pemisahan tanggung jawab (*Separation of Concerns*)
 
 ---
 
-## 📊 Matriks Fitur & Status Pengembangan
+## Matriks Fitur & Status Pengembangan
 
 | Modul Fitur | Lokasi Kode | Status | Keterangan Operasional |
 | :--- | :--- | :---: | :--- |
-| **Layar Pembuka (Splash)** | `src/app/startApps.tsx` | 🟢 **Selesai** | Animasi kinetik SVG logo cangkir kopi dengan *cubic easing* dan transisi otomatis ke beranda. |
-| **Dashboard Operasional** | `src/app/main.tsx` | 🟢 **Selesai** | Ringkasan operasional harian terpadu dengan navigasi cepat ke seluruh modul kasir. |
-| **Kartu Omset & Kas** | `src/components/RevenueCard.tsx` | 🟢 **Selesai** | Metrik omset harian, jumlah transaksi, split uang laci (tunai) & QRIS, dilengkapi tombol sensor privasi nominal. |
-| **Ringkasan Penjualan SVG** | `src/components/ringkasanPenjualan.tsx` | 🟢 **Selesai** | Progress ring SVG terhadap target harian, status top performer, dan panel akordeon rincian per kategori. |
-| **Peluncur Akses Cepat** | `src/components/QuickActions.tsx` | 🟢 **Selesai** | Grid shortcut fitur utama kasir (`pos`, `riwayat`, `menu`, `stock`, `report`) dengan badge notifikasi. |
-| **Kelola Pemesanan (POS)** | `src/pages/kelolaPemesanan.tsx` | 🟢 **Selesai** | Katalog produk multi-kategori, kalkulator keranjang real-time, pajak PPN 11%, hitung kembalian cepat, dan cetak nota. |
-| **Riwayat Transaksi** | `src/pages/riwayat.tsx` | 🟢 **Selesai** | Daftar transaksi tercatat, filter status (`Semua`, `Terjual`, `Batal`), pencarian real-time berdasarkan nomor order/meja. |
-| **Modal Peringatan & Hapus** | `src/components/modalNotif.tsx`, `modalHapus.tsx` | 🟢 **Selesai** | Dialog modal aksesibel untuk konfirmasi pembatalan pesanan dan peringatan stok bahan kritis. |
-| **Kelola Menu & Kategori** | `src/components/QuickActions.tsx` | 🟡 **Dalam Proses** | Manajemen daftar produk, penyesuaian harga, penambahan varian (hot/ice/topping). |
-| **Kelola Stok & Inventori** | `src/components/QuickActions.tsx` | 🟡 **Dalam Proses** | Manajemen kartu stok bahan baku (susu, biji kopi, cup), peringatan otomatis bahan menipis (*low stock alert*). |
-| **Laporan & Analitik** | `src/components/QuickActions.tsx` | 🟡 **Dalam Proses** | Laporan laba/rugi, ekspor transaksi CSV/PDF, analisis jam sibuk gerai (*peak hours*). |
-| **Integrasi Printer Thermal** | - | ⚪ **Direncanakan** | Integrasi pencetakan struk via Bluetooth thermal printer protokol ESC/POS. |
-| **Multi-outlet & Sinkronisasi** | - | ⚪ **Direncanakan** | Dukungan multi-cabang dengan sinkronisasi database cloud waktu nyata. |
+| **Layar Pembuka (Splash)** | `src/app/startApps.tsx` | **Selesai** | Animasi kinetik SVG logo cangkir kopi dengan *cubic easing* dan transisi otomatis ke beranda. |
+| **Dashboard Operasional** | `src/app/main.tsx` | **Selesai** | Ringkasan operasional harian terpadu dengan navigasi cepat ke seluruh modul kasir. |
+| **Kartu Omset & Kas** | `src/components/RevenueCard.tsx` | **Selesai** | Metrik omset harian, jumlah transaksi, split uang laci (tunai) & QRIS, dilengkapi tombol sensor privasi nominal. |
+| **Ringkasan Penjualan SVG** | `src/components/ringkasanPenjualan.tsx` | **Selesai** | Progress ring SVG terhadap target harian, status top performer, dan panel akordeon rincian per kategori. |
+| **Peluncur Akses Cepat** | `src/components/QuickActions.tsx` | **Selesai** | Grid shortcut fitur utama kasir (`pos`, `riwayat`, `menu`, `stock`, `report`) dengan badge notifikasi. |
+| **Kelola Pemesanan (POS)** | `src/pages/kelolaPemesanan.tsx` | **Selesai** | Katalog produk multi-kategori, kalkulator keranjang real-time, pajak PPN 11%, hitung kembalian cepat, dan cetak nota. |
+| **Riwayat Transaksi** | `src/pages/riwayat.tsx` | **Selesai** | Daftar transaksi tercatat, filter status (`Semua`, `Terjual`, `Batal`), pencarian real-time berdasarkan nomor order/meja. |
+| **Modal Peringatan & Hapus** | `src/components/modalNotif.tsx`, `modalHapus.tsx` | **Selesai** | Dialog modal aksesibel untuk konfirmasi pembatalan pesanan dan peringatan stok bahan kritis. |
+| **Kelola Menu & Kategori** | `src/components/QuickActions.tsx` | **Dalam Proses** | Manajemen daftar produk, penyesuaian harga, penambahan varian (hot/ice/topping). |
+| **Kelola Stok & Inventori** | `src/components/QuickActions.tsx` | **Dalam Proses** | Manajemen kartu stok bahan baku (susu, biji kopi, cup), peringatan otomatis bahan menipis (*low stock alert*). |
+| **Laporan & Analitik** | `src/components/QuickActions.tsx` | **Dalam Proses** | Laporan laba/rugi, ekspor transaksi CSV/PDF, analisis jam sibuk gerai (*peak hours*). |
+| **Integrasi Printer Thermal** | - | **Direncanakan** | Integrasi pencetakan struk via Bluetooth thermal printer protokol ESC/POS. |
+| **Multi-outlet & Sinkronisasi** | - | **Direncanakan** | Dukungan multi-cabang dengan sinkronisasi database cloud waktu nyata. |
 
 ---
 
-## 💻 Implementasi Kode Kunci
+## Implementasi Kode Kunci
 
 ### 1. Single Source of Truth (SSOT) Dynamic Router
 
@@ -229,7 +229,7 @@ export default function Main() {
 
 ---
 
-## 📁 Struktur Direktori Proyek
+## Struktur Direktori Proyek
 
 ```text
 swiftcoffeeapps/
@@ -278,7 +278,7 @@ swiftcoffeeapps/
 
 ---
 
-## 🚀 Panduan Memulai & Pengembangan Lokal
+## Panduan Memulai & Pengembangan Lokal
 
 ### Prasyarat Sistem
 - **Node.js**: Versi `18.x` atau lebih baru (`v20.x` LTS direkomendasikan).
@@ -321,7 +321,7 @@ swiftcoffeeapps/
 
 ---
 
-## 🛡️ Standar Kualitas & Panduan Rekayasa
+## Standar Kualitas & Panduan Rekayasa
 
 Sebagai engineer yang memegang prinsip perfeksionisme dan kode bersih (*clean code*), seluruh kontribusi pada SwiftPOS wajib mematuhi standar berikut:
 
@@ -332,9 +332,9 @@ Sebagai engineer yang memegang prinsip perfeksionisme dan kode bersih (*clean co
 
 ---
 
-## 👨‍💻 Pengembang & Dedikasi
+## Pengembang & Dedikasi
 
-* **Arsitek & Lead Fullstack Engineer:** **Rezha**
+* **Arsitek & Lead Fullstack Engineer:** **Rezha (zhent)**
 * **Misi:** Memberikan kontribusi nyata dalam digitalisasi operasional bisnis UMKM Indonesia dengan perangkat lunak berkualitas kelas dunia.
 * **Lisensi:** Proyek ini didistribusikan di bawah lisensi terbuka [MIT License](./frontend/LICENSE).
 

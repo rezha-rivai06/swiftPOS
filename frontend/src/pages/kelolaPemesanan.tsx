@@ -6,10 +6,10 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StatusBar,
   useWindowDimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ArrowLeftIcon } from '../icons';
 
@@ -159,14 +159,14 @@ export default function KelolaPemesanan({
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
       <ModalHapus
         tampil={konfirmasiHapus.tampil}
         namaItem={konfirmasiHapus.namaItem}
         onHapus={hapusItem}
         onBatal={batalHapus}
       />
-      <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
+      <StatusBar barStyle="light-content" />
 
       <View role="navigation" aria-label="Navigasi Kasir" style={styles.navbar}>
         <View style={styles.navbarLeft}>
@@ -550,9 +550,9 @@ const styles = StyleSheet.create({
   },
   navbar: {
     backgroundColor: '#0F766E',
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 22,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -585,7 +585,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     overflow: 'hidden',
-    marginTop: -10,
+    marginTop: -8,
   },
   tabletLayout: {
     flex: 1,

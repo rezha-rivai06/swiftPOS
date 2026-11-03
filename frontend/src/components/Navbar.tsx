@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
   navbarContainer: {
     backgroundColor: '#0F766E',
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 28,
+    paddingTop: 8,
+    paddingBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

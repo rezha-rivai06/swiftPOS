@@ -2,9 +2,9 @@
 
 > **Aplikasi Kasir (Point of Sale) Modern, Responsif, dan Berkinerja Tinggi untuk Gerai Kopi dan Usaha Kuliner (F&B) UMKM.**
 
-[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2057-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
-[![React Native](https://img.shields.io/badge/React_Native-0.86-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
-[![React](https://img.shields.io/badge/React-19.2-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2058-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+[![React Native](https://img.shields.io/badge/React_Native-0.88-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
+[![React](https://img.shields.io/badge/React-19.3-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Status](https://img.shields.io/badge/Status-Active_Development-10B981?style=for-the-badge)](https://github.com/rivzhent/swiftcoffeeapps)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
@@ -39,14 +39,14 @@ Banyak UMKM terhambat oleh aplikasi kasir yang lambat, berbasis langganan mahal,
 
 | Kategori | Teknologi / Pustaka | Versi | Peran & Penggunaan |
 | :--- | :--- | :--- | :--- |
-| **Core Framework** | React Native | `~0.86.3` | Fondasi platform lintas perangkat (Mobile & Web) |
-| **Runtime & Tooling** | Expo | `~57.0.24` | Tooling universal ekosistem React Native |
-| **Routing Engine** | Expo Router | `~57.0.22` | Navigasi berbasis file & dinamis (`app/` system) |
-| **UI Library** | React | `19.2.3` | Komponen fungsional & hooks reaktif modern |
+| **Core Framework** | React Native | `~0.88.1` | Fondasi platform lintas perangkat (Mobile & Web) |
+| **Runtime & Tooling** | Expo | `~58.0.22` | Tooling universal ekosistem React Native |
+| **Routing Engine** | Expo Router | `~58.0.29` | Navigasi berbasis file & dinamis (`app/` system) |
+| **UI Library** | React | `19.3.0` | Komponen fungsional & hooks reaktif modern |
 | **Language** | TypeScript | `~6.0.3` | Strict type safety, kontrak data, dan IntelliSense |
-| **Vector & Graphics** | React-Native-SVG | `15.15.4` | Rendering ikon vektor dinamis & gauge lingkaran |
+| **Vector & Graphics** | React-Native-SVG | `15.16.0` | Rendering ikon vektor dinamis & gauge lingkaran |
 | **Animation Engine** | React Native Animated | Bawaan | Transisi kinetik splash screen & feedback mikro |
-| **Web Target** | React-Native-Web | `~0.21.0` | Kompilasi layout mobile ke browser desktop/tablet |
+| **Web Target** | React-Native-Web | `~0.21.4` | Kompilasi layout mobile ke browser desktop/tablet |
 
 ---
 

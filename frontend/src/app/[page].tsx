@@ -29,7 +29,15 @@ export default function DynamicPage() {
     );
   }
 
-  return <KomponenHalaman onBack={() => router.replace('/main')} />;
+  const tanganiKembali = () => {
+  if (router.canGoBack()) {
+    router.back();
+  } else {
+    router.replace('/main');
+  }
+ };
+
+ return <KomponenHalaman onBack={tanganiKembali} />;
 }
 
 const styles = StyleSheet.create({

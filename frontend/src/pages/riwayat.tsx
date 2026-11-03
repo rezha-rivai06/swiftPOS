@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  SafeAreaView,
   StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ArrowLeftIcon } from '../icons';
 
@@ -102,19 +102,55 @@ export default function RiwayatPesanan({ onBack }: RiwayatPesananProps = {}) {
         (pilihanFilter === 'Batal' && item.status === 'BATAL');
 
       const pencarian = kataKunciCari.toLowerCase().trim();
-      const cocokCari =
+      const PencarianCocok =
         !pencarian ||
         item.orderNumber.toLowerCase().includes(pencarian) ||
         item.tipePesanan.toLowerCase().includes(pencarian) ||
         item.daftarMenu.toLowerCase().includes(pencarian);
 
-      return cocokanFilter && cocokCari;
+      return cocokanFilter && PencarianCocok;
     });
   }, [pilihanFilter, kataKunciCari]);
 
+  const handlePencarian = (teks: string) => {
+    setKataKunciCari(teks);
+
+    const kataKunci = teks.toLowerCase().trim();
+
+    if (kataKunci !== '' && pilihanFilter !== 'Semua') {
+      const itemDiTabIni = DATA_TRANSAKSI.some((item) => {
+        const cocokStatus =
+          pilihanFilter === 'Terjual'
+            ? item.status === 'TERJUAL'
+            : item.status === 'BATAL';
+
+        const cocokTeks =
+          item.orderNumber.toLowerCase().includes(kataKunci) ||
+          item.tipePesanan.toLowerCase().includes(kataKunci) ||
+          item.daftarMenu.toLowerCase().includes(kataKunci);
+
+        return cocokStatus && cocokTeks;
+      });
+
+      if (!itemDiTabIni) {
+        const itemDiTabLain = DATA_TRANSAKSI.some((item) => {
+          return (
+            item.orderNumber.toLowerCase().includes(kataKunci) ||
+            item.tipePesanan.toLowerCase().includes(kataKunci) ||
+            item.daftarMenu.toLowerCase().includes(kataKunci)
+          );
+        });
+
+        if (itemDiTabLain) {
+          setPilihanFilter('Semua');
+        }
+      }
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
+      <StatusBar barStyle="light-content" />
 
      
       <View role="navigation" aria-label="Navigasi Riwayat" style={styles.navbar}>
@@ -139,7 +175,7 @@ export default function RiwayatPesanan({ onBack }: RiwayatPesananProps = {}) {
             placeholder="Cari pesanan..."
             placeholderTextColor="#94A3B8"
             value={kataKunciCari}
-            onChangeText={setKataKunciCari}
+            onChangeText={handlePencarian}
             autoCapitalize="none"
           />
         </View>
@@ -262,9 +298,9 @@ const styles = StyleSheet.create({
   },
   navbar: {
     backgroundColor: '#0F766E',
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 22,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -307,7 +343,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     overflow: 'hidden',
-    marginTop: -10,
+    marginTop: -8,
     paddingHorizontal: 16,
     paddingTop: 18,
   },

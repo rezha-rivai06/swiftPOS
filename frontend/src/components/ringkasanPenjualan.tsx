@@ -56,7 +56,6 @@ export default function RingkasanPenjualan({
       aria-label="Ringkasan Penjualan Hari Ini"
       style={styles.kartu}
     >
-      {/* ── HEADER KARTU ── */}
       <View style={styles.headerBaris}>
         <View>
           <Text role="heading" aria-level={3} style={styles.judulKartu}>
@@ -81,9 +80,7 @@ export default function RingkasanPenjualan({
         </TouchableOpacity>
       </View>
 
-      {/* ── BARIS KONTEN UTAMA: RING + INFO ── */}
       <View style={styles.barisTengah}>
-        {/* SVG Circular Ring */}
         <View
           role="progressbar"
           aria-valuenow={persentase}
@@ -93,7 +90,6 @@ export default function RingkasanPenjualan({
           style={styles.wrapperRing}
         >
           <Svg width={104} height={104} viewBox="0 0 110 110">
-            {/* Background Track */}
             <Circle
               cx={55}
               cy={55}
@@ -102,7 +98,6 @@ export default function RingkasanPenjualan({
               strokeWidth={STROKE_WIDTH}
               fill="none"
             />
-            {/* Active Progress Ring */}
             <Circle
               cx={55}
               cy={55}
@@ -126,7 +121,6 @@ export default function RingkasanPenjualan({
           </View>
         </View>
 
-        {/* Informasi Kategori */}
         <View style={styles.infoKategori}>
           <Text style={styles.labelInfo}>Total Kategori Aktif Terjual:</Text>
           <Text style={styles.nilaiKategori}>{`${totalKategori} Kategori`}</Text>
@@ -140,7 +134,6 @@ export default function RingkasanPenjualan({
         </View>
       </View>
 
-      {/* ── PANEL EKSPANSI: DETAIL KATEGORI ── */}
       {bukaRincian && (
         <View
           role="region"
@@ -166,7 +159,6 @@ export default function RingkasanPenjualan({
         </View>
       )}
 
-      {/* ── FOOTER HINT EXPAND ── */}
       <TouchableOpacity
         role="button"
         aria-label="Buka tutup rincian per kategori"

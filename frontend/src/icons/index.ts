@@ -8,4 +8,6 @@ export { default as PrinterIcon } from './PrinterIcon';
 export { default as ShiftIcon } from './ShiftIcon';
 export { default as BellIcon } from './BellIcon';
 export { default as ArrowLeftIcon } from './ArrowLeftIcon';
+export { default as PencilIcon } from './PencilIcon';
+export { default as TrashIcon } from './TrashIcon';
 

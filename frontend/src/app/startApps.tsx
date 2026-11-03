@@ -111,7 +111,7 @@ export default function StartApps() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
+      <StatusBar barStyle="light-content" />
 
       <Animated.View
         role="region"

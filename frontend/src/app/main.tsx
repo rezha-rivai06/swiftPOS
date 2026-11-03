@@ -3,10 +3,10 @@ import {
   StyleSheet, 
   View, 
   ScrollView, 
-  SafeAreaView, 
   StatusBar,
   useWindowDimensions 
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 import { 
@@ -31,10 +31,7 @@ export default function Main() {
     pesan: '',
   });
 
-  const bukaNotif = (
-    judul: string,
-    pesan: string
-  ) => {
+  const bukaNotif = (judul: string, pesan: string) => {
     setNotif({ visible: true, judul, pesan });
   };
 
@@ -50,8 +47,8 @@ export default function Main() {
       case 'riwayat':
         router.push('/riwayat');
         break;
-      case 'menu':
-        bukaNotif('Kelola Menu', 'Fitur ini masih dalam tahap pengembangan.');
+      case 'kelolaMenu':
+        router.push('/kelolaMenu');
         break;
       case 'stock':
         bukaNotif('Kelola Stok', 'Fitur ini masih dalam tahap pengembangan.');
@@ -65,8 +62,8 @@ export default function Main() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F766E" />
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
+      <StatusBar barStyle="light-content" />
       
       <ModalNotif
         visible={notif.visible}
@@ -134,7 +131,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     overflow: 'hidden',
-    marginTop: -12,
+    marginTop: -8,
     width: '100%',
     maxWidth: '100%',
   },

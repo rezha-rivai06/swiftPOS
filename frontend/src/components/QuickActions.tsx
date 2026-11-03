@@ -12,7 +12,7 @@ import {
   ShiftIcon 
 } from '../icons';
 
-export type ActionId = HalamanRute | 'menu' | 'stock' | 'report';
+export type ActionId = HalamanRute | 'kelolaMenu' | 'stock' | 'report';
 
 export interface ActionItem {
   id: ActionId;
@@ -26,12 +26,12 @@ export interface ActionItem {
 export const DEFAULT_ACTIONS: ActionItem[] = [
   { id: 'pos', title: 'Kasir POS', icon: <CartIcon size={24} color="#10B981" />, bgColor: '#10B981', badge: 'Utama', badgeColor: '#059669' },
   { id: 'riwayat', title: 'Riwayat', icon: <OrdersIcon size={24} color="#3B82F6" />, bgColor: '#3B82F6' },
-  { id: 'menu', title: 'Kelola Menu', icon: <CoffeeIcon size={24} color="#D97706" />, bgColor: '#D97706' },
+  { id: 'kelolaMenu', title: 'Kelola Item', icon: <CoffeeIcon size={24} color="#D97706" />, bgColor: '#D97706' },
   { id: 'stock', title: 'Stok Bahan', icon: <StockIcon size={24} color="#EF4444" />, bgColor: '#EF4444', badge: 'Habis', badgeColor: '#DC2626' },
   { id: 'report', title: 'Laporan', icon: <ReportIcon size={24} color="#8B5CF6" />, bgColor: '#8B5CF6' },
 ];
 
-interface QuickActionsProps {
+interface QuickActionsTipeData {
   title?: string;
   actions?: ActionItem[];
   onActionPress?: (id: ActionId) => void;
@@ -41,7 +41,7 @@ export default function QuickActions({
   title = 'Fitur aplikasi',
   actions = DEFAULT_ACTIONS, 
   onActionPress 
-}: QuickActionsProps) {
+}: QuickActionsTipeData) {
   return (
     <View role="region" aria-label="Menu Akses Cepat" style={styles.sectionContainer}>
       <Text role="heading" aria-level={3} style={styles.sectionTitle}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,8 @@ import {
   StatusBar,
   Alert,
   Image,
+  Animated,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -20,6 +22,12 @@ interface TambahItemProps {
   onSuccess?: () => void;
 }
 
+interface FormErrors {
+  nama?: string;
+  kategori?: string;
+  harga?: string;
+}
+
 export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
   const router = useRouter();
 
@@ -28,6 +36,26 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
   const [harga, setHarga] = useState('');
   const [deskripsi, setDeskripsi] = useState('');
   const [fotoUri, setFotoUri] = useState<string | null>(null);
+
+  const [errors, setErrors] = useState<FormErrors>({});
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+
+  const triggeranimasi = () => {
+    shakeAnim.setValue(0);
+    const apps = Platform.OS !== 'web';
+    Animated.sequence([
+      Animated.timing(shakeAnim, { toValue: 10, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: -10, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: 8, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: -8, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: 5, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: -5, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: 3, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: -3, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: 1, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 70, useNativeDriver: apps }),
+    ]).start();
+  };
 
   const kembali = () => {
     if (router.canGoBack()) {
@@ -40,20 +68,42 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
   };
 
   const simpanMenu = () => {
-    if (!nama.trim()) {
-      Alert.alert('Data Belum Lengkap', 'Silakan masukkan nama menu terlebih dahulu.');
-      return;
-    }
+    const errorBaru: FormErrors = {};
 
-    if (!harga.trim() || isNaN(Number(harga)) || Number(harga) <= 0) {
-      Alert.alert('Harga Tidak Valid', 'Silakan masukkan harga jual yang valid.');
-      return;
+    if (!nama.trim()) {
+      errorBaru.nama = 'nama wajib diisi';
+    } else if (/^\d+$/.test(nama.trim())) {
+      errorBaru.nama = 'tidak boleh hanya angka';
+    } else if (!/[a-zA-Z]/.test(nama.trim())) {
+      errorBaru.nama = 'harus mengandung huruf';
     }
 
     if (!kategori.trim()) {
-      Alert.alert('Kategori Kosong', 'Silakan pilih atau ketik kategori untuk menu ini.');
+      errorBaru.kategori = 'kategori wajib diisi';
+    } else if (/^\d+$/.test(kategori.trim())) {
+      errorBaru.kategori = 'tidak boleh hanya angka';
+    } else if (!/[a-zA-Z]/.test(kategori.trim())) {
+      errorBaru.kategori = 'harus mengandung huruf';
+    }
+
+    if (!harga.trim()) {
+      errorBaru.harga = 'harga wajib diisi';
+    } else if (/\D/.test(harga.trim())) {
+      errorBaru.harga = 'hanya boleh angka';
+    } else if (Number(harga) <= 0) {
+      errorBaru.harga = 'nominal tidak valid';
+    }
+
+    const jumlahError = Object.keys(errorBaru).length;
+    if (jumlahError > 0) {
+      setErrors(errorBaru);
+      requestAnimationFrame(() => {
+        triggeranimasi();
+      });
       return;
     }
+
+    setErrors({});
 
     Alert.alert(
       'Menu Tersimpan',
@@ -73,10 +123,10 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
     );
   };
 
-  const formatPratinjauHarga = (val: string) => {
-    const num = Number(val.replace(/\D/g, ''));
-    if (!num) return 'Rp 0';
-    return 'Rp ' + num.toLocaleString('id-ID');
+  const formatPratinjauHarga = (harga: string) => {
+    const angka = Number(harga.replace(/\D/g, ''));
+    if (!angka) return 'Rp 0';
+    return 'Rp ' + angka.toLocaleString('id-ID');
   };
 
   const fotoDenganKamera = async () => {
@@ -87,8 +137,7 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
     }
 
     const jalankanKamera = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
+      allowsEditing: false,
       quality: 0.7,
     });
 
@@ -106,8 +155,7 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
 
     const hasilGaleri = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
+      allowsEditing: false,
       quality: 0.7,
     });
 
@@ -176,52 +224,102 @@ export default function TambahItem({ onBack, onSuccess }: TambahItemProps) {
 
           <View style={styles.formCard}>
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>
-                Nama item <Text style={styles.wajib}>*</Text>
-              </Text>
+              <View style={styles.labelRow}>
+                <Text style={styles.inputLabel}>
+                  Nama item <Text style={styles.wajib}>*</Text>
+                </Text>
+                {errors.nama ? (
+                  <Animated.View
+                    style={{ transform: [{ translateX: shakeAnim }] }}
+                  >
+                    <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                      ({errors.nama})
+                    </Text>
+                  </Animated.View>
+                ) : null}
+              </View>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, errors.nama ? styles.inputError : null]}
                 placeholder="ketik nama item disini"
                 placeholderTextColor="#94A3B8"
                 value={nama}
-                onChangeText={setNama}
+                onChangeText={(teks) => {
+                  setNama(teks);
+                  if (errors.nama) {
+                    setErrors((name) => ({ ...name, nama: undefined }));
+                  }
+                }}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>
-                Kategori Menu <Text style={styles.wajib}>*</Text>
-              </Text>
+              <View style={styles.labelRow}>
+                <Text style={styles.inputLabel}>
+                  Kategori Menu <Text style={styles.wajib}>*</Text>
+                </Text>
+                {errors.kategori ? (
+                  <Animated.View
+                    style={{ transform: [{ translateX: shakeAnim }] }}
+                  >
+                    <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                      ({errors.kategori})
+                    </Text>
+                  </Animated.View>
+                ) : null}
+              </View>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, errors.kategori ? styles.inputError : null]}
                 placeholder="Ketik kategori item disini"
                 placeholderTextColor="#94A3B8"
                 value={kategori}
-                onChangeText={setKategori}
+                onChangeText={(teks) => {
+                  setKategori(teks);
+                  if (errors.kategori) {
+                    setErrors((kat) => ({ ...kat, kategori: undefined }));
+                  }
+                }}
               />
             </View>
 
             <View style={styles.inputGroup}>
               <View style={styles.labelWithPreview}>
-                <Text style={styles.inputLabel}>
-                  Harga Jual (Rp) <Text style={styles.wajib}>*</Text>
-                </Text>
+                <View style={styles.labelRowNoMargin}>
+                  <Text style={styles.inputLabel}>
+                    Harga Jual (Rp) <Text style={styles.wajib}>*</Text>
+                  </Text>
+                  {errors.harga ? (
+                    <Animated.View
+                      style={{ transform: [{ translateX: shakeAnim }] }}
+                    >
+                      <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                        ({errors.harga})
+                      </Text>
+                    </Animated.View>
+                  ) : null}
+                </View>
                 {harga !== '' && (
                   <Text style={styles.pricePreview}>{formatPratinjauHarga(harga)}</Text>
                 )}
               </View>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, errors.harga ? styles.inputError : null]}
                 placeholder="masukkan nominal disini misal 15000"
                 placeholderTextColor="#94A3B8"
                 keyboardType="numeric"
                 value={harga}
-                onChangeText={(harga) => setHarga(harga.replace(/\D/g, ''))}
+                onChangeText={(val) => {
+                  setHarga(val.replace(/\D/g, ''));
+                  if (errors.harga) {
+                    setErrors((har) => ({ ...har, harga: undefined }));
+                  }
+                }}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Deskripsi Menu (opsional)</Text>
+              <View style={styles.labelRow}>
+                <Text style={styles.inputLabel}>Deskripsi Item (opsional)</Text>
+              </View>
               <TextInput
                 style={[styles.textInput, styles.textArea]}
                 placeholder="Ketik deskripsi item disini"
@@ -379,10 +477,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#334155',
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     marginBottom: 6,
+  },
+  labelRowNoMargin: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   wajib: {
     color: '#EF4444',
+  },
+  errorTeks: {
+    color: '#EF4444',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  inputError: {
+    borderColor: '#EF4444',
+    backgroundColor: '#FEF2F2',
   },
   labelWithPreview: {
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,8 @@ import {
   StatusBar,
   Modal,
   Alert,
+  Animated,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -33,11 +35,18 @@ const CONTOH_MENU: MenuItemData[] = [
   { id: 'm7', nama: 'Croissant Almond', harga: 22000, kategori: 'Snack', warna: '#FEF9C3', deskripsi: 'Pastry renyah berlapis dengan taburan almond panggang' },
   { id: 'm8', nama: 'Kentang Goreng', harga: 12000, kategori: 'Snack', warna: '#FEF3C7', deskripsi: 'French fries renyah dengan taburan bumbu gurih' },
   { id: 'm9', nama: 'Pisang Crispy Keju', harga: 10000, kategori: 'Snack', warna: '#F3E8FF', deskripsi: 'Pisang goreng krispi dengan limpahan keju dan susu kental' },
+  { id: 'm10', nama: 'Pisang Crispy Keju', harga: 10000, kategori: 'Snack', warna: '#F3E8FF', deskripsi: 'Pisang goreng krispi dengan limpahan keju dan susu kental' },
 ];
 
 interface KelolaMenuProps {
   onBack?: () => void;
   onTambahMenu?: () => void;
+}
+
+interface FormErrorsEdit {
+  nama?: string;
+  kategori?: string;
+  harga?: string;
 }
 
 export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
@@ -70,13 +79,35 @@ export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
     nama: string;
     harga: string;
     kategori: string;
+    deskripsi: string;
   }>({
     tampil: false,
     id: '',
     nama: '',
     harga: '',
     kategori: '',
+    deskripsi: '',
   });
+
+  const [errorsEdit, setErrorsEdit] = useState<FormErrorsEdit>({});
+  const shakeAnimEdit = useRef(new Animated.Value(0)).current;
+
+  const triggerAnimasiEdit = () => {
+    shakeAnimEdit.setValue(0);
+    const apps = Platform.OS !== 'web';
+    Animated.sequence([
+      Animated.timing(shakeAnimEdit, { toValue: 10, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: -10, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: 8, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: -8, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: 5, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: -5, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: 3, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: -3, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: 1, duration: 70, useNativeDriver: apps }),
+      Animated.timing(shakeAnimEdit, { toValue: 0, duration: 70, useNativeDriver: apps }),
+    ]).start();
+  };
 
   const kembali = () => {
     if (router.canGoBack()) {
@@ -110,42 +141,68 @@ export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
   };
 
   const bukaModalEdit = (item: MenuItemData) => {
+    setErrorsEdit({});
     setModalEdit({
       tampil: true,
       id: item.id,
       nama: item.nama,
       harga: item.harga.toString(),
       kategori: item.kategori,
+      deskripsi: item.deskripsi || '',
     });
   };
 
   const tutupModalEdit = () => {
+    setErrorsEdit({});
     setModalEdit({
       tampil: false,
       id: '',
       nama: '',
       harga: '',
       kategori: '',
+      deskripsi: '',
     });
   };
 
   const simpanEditMenu = () => {
-    if (!modalEdit.nama.trim()) {
-      Alert.alert('Data Belum Lengkap', 'Silakan masukkan nama menu.');
-      return;
-    }
+    const errorBaru: FormErrorsEdit = {};
 
-    const hargaNum = Number(modalEdit.harga.replace(/\D/g, ''));
-    if (!modalEdit.harga.trim() || isNaN(hargaNum) || hargaNum <= 0) {
-      Alert.alert('Harga Tidak Valid', 'Silakan masukkan nominal harga yang valid.');
-      return;
+    if (!modalEdit.nama.trim()) {
+      errorBaru.nama = 'nama wajib diisi';
+    } else if (/^\d+$/.test(modalEdit.nama.trim())) {
+      errorBaru.nama = 'tidak boleh hanya angka';
+    } else if (!/[a-zA-Z]/.test(modalEdit.nama.trim())) {
+      errorBaru.nama = 'harus mengandung huruf';
     }
 
     if (!modalEdit.kategori.trim()) {
-      Alert.alert('Kategori Kosong', 'Silakan tentukan kategori menu.');
+      errorBaru.kategori = 'kategori wajib diisi';
+    } else if (/^\d+$/.test(modalEdit.kategori.trim())) {
+      errorBaru.kategori = 'tidak boleh hanya angka';
+    } else if (!/[a-zA-Z]/.test(modalEdit.kategori.trim())) {
+      errorBaru.kategori = 'harus mengandung huruf';
+    }
+
+    if (!modalEdit.harga.trim()) {
+      errorBaru.harga = 'harga wajib diisi';
+    } else if (/\D/.test(modalEdit.harga.trim())) {
+      errorBaru.harga = 'hanya boleh angka';
+    } else if (Number(modalEdit.harga) <= 0) {
+      errorBaru.harga = 'nominal tidak valid';
+    }
+
+    const jumlahError = Object.keys(errorBaru).length;
+    if (jumlahError > 0) {
+      setErrorsEdit(errorBaru);
+      requestAnimationFrame(() => {
+        triggerAnimasiEdit();
+      });
       return;
     }
 
+    setErrorsEdit({});
+
+    const hargaNum = Number(modalEdit.harga);
     setDaftarMenu((menu) =>
       menu.map((item) =>
         item.id === modalEdit.id
@@ -154,6 +211,7 @@ export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
               nama: modalEdit.nama.trim(),
               harga: hargaNum,
               kategori: modalEdit.kategori.trim(),
+              deskripsi: modalEdit.deskripsi.trim() || undefined,
             }
           : item
       )
@@ -265,44 +323,110 @@ export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
             <Text style={styles.modalJudul}>Edit Menu</Text>
 
             <View style={styles.formGroupEdit}>
-              <Text style={styles.labelEdit}>Nama Menu</Text>
+              <View style={styles.labelRowEdit}>
+                <Text style={styles.labelEdit}>
+                  Nama Menu <Text style={styles.wajib}>*</Text>
+                </Text>
+                {errorsEdit.nama ? (
+                  <Animated.View
+                    style={{ transform: [{ translateX: shakeAnimEdit }] }}
+                  >
+                    <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                      ({errorsEdit.nama})
+                    </Text>
+                  </Animated.View>
+                ) : null}
+              </View>
               <TextInput
-                style={styles.inputEdit}
+                style={[styles.inputEdit, errorsEdit.nama ? styles.inputError : null]}
                 placeholder="Nama menu..."
                 placeholderTextColor="#94A3B8"
                 value={modalEdit.nama}
-                onChangeText={(teks) =>
-                  setModalEdit((prev) => ({ ...prev, nama: teks }))
-                }
+                onChangeText={(teks) => {
+                  setModalEdit((prev) => ({ ...prev, nama: teks }));
+                  if (errorsEdit.nama) {
+                    setErrorsEdit((prev) => ({ ...prev, nama: undefined }));
+                  }
+                }}
               />
             </View>
 
             <View style={styles.formGroupEdit}>
-              <Text style={styles.labelEdit}>Kategori</Text>
+              <View style={styles.labelRowEdit}>
+                <Text style={styles.labelEdit}>
+                  Kategori <Text style={styles.wajib}>*</Text>
+                </Text>
+                {errorsEdit.kategori ? (
+                  <Animated.View
+                    style={{ transform: [{ translateX: shakeAnimEdit }] }}
+                  >
+                    <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                      ({errorsEdit.kategori})
+                    </Text>
+                  </Animated.View>
+                ) : null}
+              </View>
               <TextInput
-                style={styles.inputEdit}
+                style={[styles.inputEdit, errorsEdit.kategori ? styles.inputError : null]}
                 placeholder="Kategori menu..."
                 placeholderTextColor="#94A3B8"
                 value={modalEdit.kategori}
-                onChangeText={(teks) =>
-                  setModalEdit((prev) => ({ ...prev, kategori: teks }))
-                }
+                onChangeText={(teks) => {
+                  setModalEdit((prev) => ({ ...prev, kategori: teks }));
+                  if (errorsEdit.kategori) {
+                    setErrorsEdit((prev) => ({ ...prev, kategori: undefined }));
+                  }
+                }}
               />
             </View>
 
             <View style={styles.formGroupEdit}>
-              <Text style={styles.labelEdit}>Harga Jual (Rp)</Text>
+              <View style={styles.labelRowEdit}>
+                <Text style={styles.labelEdit}>
+                  Harga Jual (Rp) <Text style={styles.wajib}>*</Text>
+                </Text>
+                {errorsEdit.harga ? (
+                  <Animated.View
+                    style={{ transform: [{ translateX: shakeAnimEdit }] }}
+                  >
+                    <Text role="alert" aria-live="assertive" style={styles.errorTeks}>
+                      ({errorsEdit.harga})
+                    </Text>
+                  </Animated.View>
+                ) : null}
+              </View>
               <TextInput
-                style={styles.inputEdit}
+                style={[styles.inputEdit, errorsEdit.harga ? styles.inputError : null]}
                 placeholder="Nominal harga..."
                 placeholderTextColor="#94A3B8"
                 keyboardType="numeric"
                 value={modalEdit.harga}
-                onChangeText={(teks) =>
+                onChangeText={(teks) => {
                   setModalEdit((prev) => ({
                     ...prev,
                     harga: teks.replace(/\D/g, ''),
-                  }))
+                  }));
+                  if (errorsEdit.harga) {
+                    setErrorsEdit((prev) => ({ ...prev, harga: undefined }));
+                  }
+                }}
+              />
+            </View>
+
+            <View style={styles.formGroupEdit}>
+              <View style={styles.labelRowEdit}>
+                <Text style={styles.labelEdit}>Deskripsi item (opsional)</Text>
+              </View>
+              <TextInput
+                style={[styles.inputEdit, styles.textAreaEdit]}
+                placeholder="Ketik deskripsi item disini"
+                placeholderTextColor="#94A3B8"
+                multiline
+                numberOfLines={3}
+                textAlignVertical="top"
+                value={modalEdit.deskripsi}
+                onChangeText={(teks) =>
+                  setModalEdit((prev) => ({ ...prev, deskripsi: teks }))
                 }
               />
             </View>
@@ -352,7 +476,7 @@ export default function KelolaMenu({ onBack, onTambahMenu }: KelolaMenuProps) {
         <View style={styles.topActionBar}>
           <View style={styles.totalBadge}>
             <Text style={styles.totalBadgeText}>
-              Total <Text style={styles.totalBadgeNumber}>{totalSemuaMenu}</Text> Menu
+              Total keseluruhan <Text style={styles.totalBadgeNumber}>{totalSemuaMenu}</Text> Item
             </Text>
           </View>
 
@@ -758,7 +882,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#334155',
+  },
+  labelRowEdit: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     marginBottom: 4,
+  },
+  wajib: {
+    color: '#EF4444',
+  },
+  errorTeks: {
+    color: '#EF4444',
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  inputError: {
+    borderColor: '#EF4444',
+    backgroundColor: '#FEF2F2',
   },
   inputEdit: {
     backgroundColor: '#F8FAFC',
@@ -770,6 +911,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#0F172A',
     width: '100%',
+  },
+  textAreaEdit: {
+    minHeight: 68,
+    paddingTop: 8,
   },
   modalBtnSimpan: {
     flex: 1,

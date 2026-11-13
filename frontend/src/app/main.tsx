@@ -51,7 +51,7 @@ export default function Main() {
         router.push('/kelolaMenu');
         break;
       case 'stock':
-        bukaNotif('Kelola Stok', 'Fitur ini masih dalam tahap pengembangan.');
+        router.push('/stock');
         break;
       case 'report':
         bukaNotif('Kelola Laporan', 'Fitur ini masih dalam tahap pengembangan.');
